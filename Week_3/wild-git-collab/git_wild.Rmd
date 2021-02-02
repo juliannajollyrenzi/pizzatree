@@ -1,0 +1,52 @@
+---
+title: "Week 3 Discussion File"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+## Part A: Make edits (no conflict)
+
+```{r partner_1a}
+# Partner 1: 
+# Run the code below to see the original graph
+# Change the code below to make the point color change based on 'cut', and update the theme to theme_bw(). Update the title to include your first name. 
+
+ggplot(data = diamonds, aes(x = carat, y = price)) +
+  geom_point() +
+  theme_void() +
+  labs(title = "Julianna was here")
+```
+
+```{r partner_foxfoot}
+# Partner 2: 
+# Run the code below to see the original graph
+# Change the code below to make the geom a geom_jitter, and update the theme to theme_light. Update the title to include your first name. 
+
+ggplot(data = diamonds, aes(x = color, y = carat)) +
+  geom_jitter() +
+  theme_light() +
+  labs(title = "YOURNAME was here")
+```
+
+## PART B: Make problems
+
+```{r break-it-1}
+
+
+
+ggplot(data = diamonds, aes(x = carat, y = price)) +
+  geom_point(color = "green") +
+  theme_void()
+
+```
+
+```{r break-it-2}
+# graphy mc graph
+ggplot(data = diamonds, aes(x = price, y = carat)) + geom_point(color = "purple")
+```
+
+## END Discussion 3

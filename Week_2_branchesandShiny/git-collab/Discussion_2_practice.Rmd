@@ -1,0 +1,20 @@
+---
+title: "Discussion 2"
+author: "Julianna Renzi"
+date: "1/12/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+require(tidyverse)
+require(palmerpenguins)
+```
+```{r}
+ggplot(data = penguins, aes(x = body_mass_g, 
+      y = flipper_length_mm)) + 
+                              geom_point()
+
+```
+

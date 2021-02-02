@@ -1,0 +1,52 @@
+---
+title: "Rmarkdown Tips"
+author: "Julianna Renzi"
+date: "1/26/2021"
+output: 
+  html_document:
+    theme: flatly
+    code_folding: hide
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Introduction
+
+## Background
+
+## Literature Review {.tabset}
+
+### R History
+
+Some content I've added to this amazing tab!
+
+### R Today
+
+This is the content in the other tab!
+
+## My favorite R packages
+
+And an amazing plot!
+
+```{r}
+plot(airmiles)
+```
+
+
+### For data visualization
+
+Add free themes here: https://bootswatch.com/3/
+Put them in the YAML
+
+To add the option for code add code_folding to the YAML (can click to see code but it's not there automatically)
+
+### For communication
+
+### For analysis
+

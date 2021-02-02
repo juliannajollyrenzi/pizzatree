@@ -1,0 +1,99 @@
+---
+title: "Discussion 4"
+author: "Julianna Renzi"
+date: "1/26/2021"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE, message = FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(lubridate)
+library(janitor)
+library(tsibble)
+library(feasts)
+library(rsconnect)
+```
+
+### Step 4: Read in data and convert to a tsibble
+
+```{r, message = FALSE, warning=FALSE}
+truckee <- read_csv(here("data", "truckee_river.csv"), skip = 29) %>% # get rid of the header
+  filter(agency_cd != "5s") %>% # get rid of the weird other row 
+  select(datetime, discharge_cfs) # just get the columns we need
+
+
+```
+Step 5: convert to a tsibble and visualize
+
+```{r, message = FALSE, warning=FALSE}
+truckee_ts <- truckee %>% 
+  mutate(date = mdy(datetime)) %>% 
+  mutate(discharge_cfs = as.numeric(discharge_cfs)) %>% 
+  as_tsibble(key = NULL, #  key would be stations or different sites if you had them
+             index = date)
+
+# create time series graph
+truckee_ts %>% 
+  ggplot(aes(x = date, y = discharge_cfs)) +
+  geom_line() +
+  theme_classic()
+
+# create seasonplot graph
+truckee_mon <- truckee_ts %>% 
+  index_by(yr_mo = ~yearmonth(.)) %>% # this is like group_by applied to both year and month (yearmonth) and to the whole specified vector (.)
+  summarize(monthly_mean_discharg = mean(discharge_cfs, na.rm = TRUE)) 
+
+# for general
+truckee_ts %>% 
+  gg_season(y = discharge_cfs) +
+  theme_light()
+
+# for month
+truckee_mon %>% 
+  gg_season(y = monthly_mean_discharg) +
+  theme_light()
+
+```
+
+Step 6: Embed Shiny elements to allow the user to select a date
+
+```{r, message = FALSE, warning=FALSE}
+# make input panel
+inputPanel(
+  dateRangeInput(inputId = "dates",
+                 label = h4("Select date range: "),
+                 min = "2010-01-01",
+                 max = "2021-01-24",
+                 start = "2010, 01, 01",
+                 end = "2021-01-24",
+                 format = "yyyy-mm-dd")
+)
+
+# now make a reactive data frame using the output from the selections
+truckee_react <- reactive({
+  
+  truckee_ts %>% 
+    filter(date >= input$dates[1],
+           date <= input$dates[2])
+  
+})
+
+# now create a reactive plot that only includes observations within the date range
+renderPlot({
+  
+  ggplot(data = truckee_react(),
+         aes(x = date,
+             y = discharge_cfs)) +
+    geom_line() +
+    theme_minimal() +
+    labs(x = "Date", y = "Truckee River daily mean discharge")
+})
+
+```
+
+To deploy app: 
+`library(rsconnect)`
+`deployApp()`
